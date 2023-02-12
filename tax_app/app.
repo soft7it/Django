@@ -7,4 +7,9 @@ while True:
 
     income_salarry = int(input('You salarry per year : '))
 
-    calculateTax(income_salarry)  
+    print(calculateTax(income_salarry)) 
+    
+    query = input("Would you like check again (y/n) ?  ")
+
+    if query != 'y':
+        break
