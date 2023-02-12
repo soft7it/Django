@@ -1,0 +1,10 @@
+from tax import *
+
+
+while True:
+
+    clear()
+
+    income_salarry = int(input('You salarry per year : '))
+
+    calculateTax(income_salarry)  
