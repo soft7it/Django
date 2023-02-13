@@ -3,13 +3,17 @@ from os import system
 #### calculate tax_income  #############
 
 def calculateTax(amount):
-    #amount      # suma de bani
-    interes = 0.02     # 2% dobinda procente
-    comission_interes = amount * interes
-    # target_borrow  # salariu , imprumut
-    tax_income = 0.2 # 20%
-    tax_salary = amount * tax_income
-    return comission_interes, 'for rate credit. ', tax_salary, 'for income tax.'
+
+    total_dict = {    } # create a dictionar
+     
+    total_dict["suma"] = amount
+    total_dict["interes"] = amount * 0.12 # 12%
+    # total_dict["sum"] = amount
+
+    # print(total_dict)
+    return total_dict
+
+    
 
 #######  clear #########################
 
