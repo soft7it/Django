@@ -5,20 +5,19 @@ from os import system
 def singUp(username, email, password): #
 
     sing_up_dict = { 
-        'key_user':'avion',
-        'key_email':'pl',
-        'key_password':'ch',
+        'key_user':'av',
+        'key_email':'pl',# ay@company.com
+        'key_password':'cFord', # istoFors
        } # dictionar
-
-    if 5 <= len(username) <= 12 and sing_up_dict["key_user"] == username and sing_up_dict["key_email"] == email and sing_up_dict["key_password"] == password: 
-        print("Good")
+    
+    if 5 <= len(username) <= 12 and sing_up_dict["key_user"] == username and sing_up_dict["key_email"] == email and sing_up_dict["key_password"] == password:# and len(password) > 7: 
+        print("Good way")
+        
+        return sing_up_dict 
+               
     else:
-        print("wrong")     
-    
-    
-    # return 
-
-    
+        print("Somthing went wrong")
+        print(sing_up_dict["key_password"])
 
 #######  clear #########################
 
