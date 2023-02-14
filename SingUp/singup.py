@@ -19,7 +19,7 @@ while True:
     email = input('Email : ')
     password = input('password : ')
 
-    singUp(username, email, password) # 
+    print(singUp(username, email, password))
 
     query = input("Would you like check again (y/n) ?  ")
 
