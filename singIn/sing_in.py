@@ -15,11 +15,11 @@ while True:
 
     clear()
 
-    username = input('Username nust be no less 5 or more 12 caracters : ')
-    # email = input('Email : ')
-    # password = input('password : ')
+    username = input('Username must not be less 5 or long 12 caracters : ')
+    email = input('Email valid: ')
+    password = input('password more 8 characters : ')
 
-    print(singUp(username)) # , email, password
+    print(singUp(username, email, password)) # 
 
     query = input("Would you like check again (y/n) ?  ")
 
