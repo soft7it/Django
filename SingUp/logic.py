@@ -5,9 +5,9 @@ from os import system
 def singUp(username, email, password): #
 
     sing_up_dict = { 
-        'key_user':'av',
-        'key_email':'pl',# ay@company.com
-        'key_password':'cFord', # istoFors
+        'key_user':'avatar',
+        'key_email':'play@company.com',# 
+        'key_password':'cistoForsFord', # 
        } # dictionar
     
     if 5 <= len(username) <= 12 and sing_up_dict["key_user"] == username and sing_up_dict["key_email"] == email and sing_up_dict["key_password"] == password:# and len(password) > 7: 
