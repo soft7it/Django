@@ -22,9 +22,9 @@ def appInfo(abc):
     print( "Hello, name application is ", abc.name, '\n Version application : ', abc.version, '\n Author : ', abc.author, '\n Published', abc.year, '\n Rating : ', abc.rating)
 
 
-atr = App('Mario Super Star', ' 7.25',
-          'Andy Jesy <andy_jesy@example.com>', '2023', f'{5} *****')
+# atr = App('Mario Super Star', ' 7.25',
+#           'Andy Jesy <andy_jesy@example.com>', '2023', f'{5} *****')
 
 # atr.appInfo() # asa nu merge
 # print(appInfo(atr)) # mai adauga none
-appInfo(atr)
+# appInfo(atr)
