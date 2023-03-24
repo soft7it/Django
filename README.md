@@ -1,7 +1,7 @@
 - 👋 Hi, I’m @Software 7IT
 - 👀 I’m interested in coding.
 - 🌱 I’m currently learning ? update New code!!!...
-- 💞️ I’m looking to collaborate on Python/Django
+- 💞️ I’m looking to collaborate on Python/Django, Drupal, DB
 - 📫 How to reach me ...
 
 <!---
