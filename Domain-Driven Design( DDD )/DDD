@@ -1,0 +1,28 @@
+https://www.youtube.com/watch?v=H5--9pMmuK4
+https://www.youtube.com/watch?v=Evers5npkmE&t=438s
+
+https://blog.airbrake.io/blog/software-design/domain-driven-design
+https://devonburriss.me/ddd-glossary/
+
+https://habr.com/ru/company/dododev/blog/489352/
+https://blog-programmista.ru/post/132-ddd-what-is-it.html
+
+Don't forget to ask chat GPT
+
+Please check yourself answering the next Qs:
+
+What is DDD ?
+What are the Domain layer and Application layer?
+What is an entity?
+What is an aggregate?
+What is a value object?
+What is an aggregate root?
+What is the ubiquitous language?
+#######################################################
+make use you install git from here https://git-scm.com/
+check in your terminal by running "git" command
+using the terminal configure your global username and email with commands shown here https://linuxize.com/post/how-to-configure-git-username-and-email/
+open vscode, install github extension
+using the palette command clone this repository locally
+switch LOCALLY to the "domain" branch
+##########################################################
