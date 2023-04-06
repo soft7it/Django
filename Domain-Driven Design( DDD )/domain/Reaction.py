@@ -14,3 +14,6 @@ class Reaction(Entity):
         self.type = type
         self.targetId = targetId
         self.authorId = authorId
+
+    def __str__(self):
+        return f'Reaction {self.id} {self.type} {self.targetId} {self.authorId}'
