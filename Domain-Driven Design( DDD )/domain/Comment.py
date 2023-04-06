@@ -14,3 +14,6 @@ class Comment(Entity):
         self.body = body
         self.targetId = targetId
         self.authorId = authorId
+
+    def __str__(self):
+        return f'Reaction {self.id} {self.body} {self.targetId} {self.authorId}'
