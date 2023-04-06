@@ -1,13 +1,15 @@
 from .Entity import Entity
 
-class User(Entity):
+class Post(Entity):
 
-    def __init__(self, username, email, password):
+    def __init__(self, title, body, authorId):
         super().__init__()
 
-        self.username = username
-        self.email = email
-        self.password = password
+        self.title = title
+        self.body = body
+        self.authorId = authorId
+        self.id = None  # the id will be set by the EntityFactory
 
     def __str__(self):
-        return f'USER {self.username} {self.email}'     
+        return f"{self.title} by user {self.authorId} felt {self.body}"
+ 
