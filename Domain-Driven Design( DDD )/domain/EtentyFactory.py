@@ -13,7 +13,7 @@ class EntityFactory:
             return user
         
         elif type == 'post':
-            post = User(params['title'], params['body'], params['authorId'],)
+            post = Post(params['title'], params['body'], params['authorId'],)
             post.id = f'{int(time() * 1000)}-{randint(100000000, 9000000000)}'
             return post
         
