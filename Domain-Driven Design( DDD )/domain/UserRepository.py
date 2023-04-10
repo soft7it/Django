@@ -41,7 +41,7 @@ class UserRepository:
             user = EntityFactory.create('user', user_data, False)
             user.id = user_data['id']
             users.append(user)
-            return users
+        return users
 
     # save the user for the first time  
     def saveUser( user ):
