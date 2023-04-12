@@ -13,4 +13,4 @@ users = UserRepository.getAllUsers()
 
 for u in users:
     print(u.id)
-    print(u.username)
+#     print(u.username)
