@@ -1,5 +1,6 @@
 from .EtentyFactory import EntityFactory
 from .User import User
+from .Post import Post
 
 
 class UserRepository:
@@ -14,20 +15,25 @@ class UserRepository:
                 'id' : '12345',
                 'username' : 'jhony',
                 'email' : 'hhony@h.com',
-                'password' : '12345'
+                'password' : '123'
             },
             {
                 'id' : '56987',
                 'username' : 'mony',
                 'email' : 'mony@h.com',
                 'password' : '654'
-            },
+            }
+        ],
+        'posts' : [
+        
         ]
     }
 
+    ##########  USER STORAGE METHOD #############################
     def getUser(id):
-        # HW : should find the user by id and return an User object
-        # also it will return None if not found 
+    #     # HW : should find the user by id and return an User object
+    #     # also it will return None if not found 
+        
         for user_data in UserRepository.db['users']:
             if user_data['id'] == id:
                 user = EntityFactory.create('user', user_data, False)
@@ -67,13 +73,27 @@ class UserRepository:
                 break
 
     # HW
-    def deleteUser( user ):
-        for i, user_data in enumerate(UserRepository.db['users']):
+    def deleteUser( user ):  
+        for user_data in UserRepository.db['users']:
             if user_data['id'] == user.id:
-                del UserRepository.db['user'][i]
+                UserRepository.db['users'].remove(user_data)
+                # del UserRepository.db['user']
                 break    
 
+    ##########  POSTS LOGIC STORAGE METHOD #############################
+     # save the user for the first time
+    def savePost(post):
+        if type(post) != Post:
+            raise TypeError('Error : savePost argument should be of Post type')
+
+        post_data = {
+            'id': post.id,
+            'title': post.title,
+            'body': post.body,
+            'authorId': post.authorId,
+        }
+
+        UserRepository.db['posts'].append(post_data)
 
 
-
-
+# HW : deletePost(), updatePost(), getPost(), getAllPost()
