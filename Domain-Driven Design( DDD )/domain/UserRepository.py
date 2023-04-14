@@ -95,5 +95,39 @@ class UserRepository:
 
         UserRepository.db['posts'].append(post_data)
 
+    # save changes for existing post
+    def updatePost(post):
+        for post_data in UserRepository.db['posts']:
+            if post_data['id'] == post.id:
+                post_data['title'] = post.title
+                post_data['body'] = post.body
+                # post_data['authorId'] = post.authorId
+                break
+
+#############  getPosts  #############################
+
+    def getPost(id):
+        for post_data in UserRepository.db['posts']:
+            if post_data['id'] == id:
+                post = EntityFactory.create('post', post_data, False)
+                post.id = post_data['id']
+                return post
+        return None
+    
+#############  getAllPosts  ##########################
+
+    def getAllPosts():
+        posts = []
+        for post_data in UserRepository.db['posts']:
+            post = EntityFactory.create('post', post_data, False)
+            post.id = post_data['id']
+            posts.append(post)
+        return posts
 
 # HW : deletePost(), updatePost(), getPost(), getAllPost()
+
+    def deletePost(post):
+        for post_data in UserRepository.db['posts']:
+            if post_data['id'] == post.id:
+                UserRepository.db['posts'].remove(post_data)
+                break
