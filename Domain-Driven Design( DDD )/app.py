@@ -54,19 +54,18 @@ print('*'*50)
 print('FIRST POST')
 u1 = UserRepository.getUser('56987')
 
-p1 = EntityFactory.create('post',{
+p2 = EntityFactory.create('post',{
     'title': 'Hello friends',
     'body' : 'learning software',
     'authorId' : u1.id
 })
 
-UserRepository.savePost(p1)
+UserRepository.savePost(p2)
 print(UserRepository.db)
 print('*'*50)
 
 #######  updatePost() 1 ############################
 print('UpDate POST ')
-u1 = UserRepository.getUser('12345')
 
 p1.title = 'The UpDate the first post by jhony'
 p1.body = 'xaxaxaxa xaxxaxa xaxaxxaaaxa'
@@ -76,20 +75,21 @@ print(UserRepository.db)
 print('*'*50)
 #######  updatePost() 2 ############################
 print('UpDate POST ')
-u1 = UserRepository.getUser('56987')
 
-p1.title = 'Meau zoro'
-p1.body = 'IHAaxaxa xaxxaxa xaxaxxaaaxa'
+p2.title = 'Meau zoro'
+p2.body = 'IHAaxaxa xaxxaxa xaxaxxaaaxa'
 
-UserRepository.updatePost(p1)
+UserRepository.updatePost(p2)
 print(UserRepository.db)
 print('*'*50)
 
 #######  getPost()    ############################
 print('GET POST 1')
-user_post = UserRepository.getPost('12345')
-if user_post:
-    print(user_post)
+io = UserRepository.getPost('56987')
+
+if io:
+    print(io.title)
+    print(io.body)
 else:
     print('Post not found.')
 print('*'*50)
@@ -107,9 +107,10 @@ print('*'*50)
 
 #######  deletePost() ############################
 print('DELETE')
-u1 = UserRepository.getUser('12345')
-UserRepository.deletePost(u1)
-if u1:
+d1 = UserRepository.getUser('56987')
+
+if d1:
+    UserRepository.deletePost(d1)
     print(UserRepository.db)
 else:
     print('Post not found.')
