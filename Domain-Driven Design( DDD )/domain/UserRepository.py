@@ -12,22 +12,54 @@ class UserRepository:
         # list of dictionaries
         'users': [
             {
-                'id' : '12345',
+                'id' : '1',
                 'username' : 'jhony',
                 'email' : 'hhony@h.com',
                 'password' : '123'
             },
             {
-                'id' : '56987',
+                'id' : '2',
                 'username' : 'mony',
                 'email' : 'mony@h.com',
                 'password' : '654'
             }
         ],
         'posts' : [
+            {
+                'id' : '1',
+                'title' : 'Post 1',
+                'body' : 'Body of post 1 ...',
+                'authorId' : '1'
+            },
+            {
+                'id' : '1',
+                'title' : 'Post 2',
+                'body' : 'Body of post 2 ...',
+                'authorId' : '1'
+            }
         
         ]
     }
+    # db = {
+    #     # list of dictionaries
+    #     'users': [
+    #         {
+    #             'id' : '12345',
+    #             'username' : 'jhony',
+    #             'email' : 'hhony@h.com',
+    #             'password' : '123'
+    #         },
+    #         {
+    #             'id' : '56987',
+    #             'username' : 'mony',
+    #             'email' : 'mony@h.com',
+    #             'password' : '654'
+    #         }
+    #     ],
+    #     'posts' : [
+        
+    #     ]
+    # }
 
     ##########  USER STORAGE METHOD #############################
     def getUser(id):
@@ -39,8 +71,21 @@ class UserRepository:
                 user = EntityFactory.create('user', user_data, False)
                 user.id = user_data['id']
                 return user
-        return None        
+        return None   
+         
+    ##########  USER STORAGE METHOD #############################
+    def getUserWithPosts(id):
+        user = UserRepository.getUser(id)
+        posts = []
+        for post_data in UserRepository.db['posts']:
+            if post_data['authorId'] == id:
+                post = EntityFactory.create('post', post_data, False)
+                post.id = post_data['id']
+                posts.append(post)
 
+        user.posts = posts
+        return user                
+###########################################################
     def getAllUsers():
         users = []
         for user_data in  UserRepository.db['users']:
@@ -112,6 +157,15 @@ class UserRepository:
                 post = EntityFactory.create('post', post_data, False)
                 return post
         return None
+    
+#############  getPosts  #############################
+
+    def getPostWithAuthor(id):
+        post = UserRepository.getPost(id)
+        author = UserRepository.getUser(post.authorId)
+
+        post.author = author
+        return post
     
 #############  getAllPosts  ##########################
 
