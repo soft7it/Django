@@ -2,6 +2,8 @@ from .EtentyFactory import EntityFactory
 from .User import User
 from .Post import Post
 
+from service.pg import connectPg
+
 
 class UserRepository:
     # CRUD + EXTENSION
@@ -66,12 +68,18 @@ class UserRepository:
     #     # HW : should find the user by id and return an User object
     #     # also it will return None if not found 
         
-        for user_data in UserRepository.db['users']:
-            if user_data['id'] == id:
-                user = EntityFactory.create('user', user_data, False)
-                user.id = user_data['id']
-                return user
-        return None   
+        # for user_data in UserRepository.db['users']:
+        #     if user_data['id'] == id:
+        #         user = EntityFactory.create('user', user_data, False)
+        #         user.id = user_data['id']
+        #         return user
+        # return None 
+        cur = connectPg()
+        cur.execute(f"SELECT * FROM users WHERE id='{id}';")
+        user_data = cur.fetchone()
+        user = EntityFactory.create('user', {'username' : user_data[1], 'email' : user_data[2], 'password' : user_data[3]}, False)
+        user.id = user_data[0]
+        return user  
          
     ##########  USER STORAGE METHOD #############################
     def getUserWithPosts(id):
