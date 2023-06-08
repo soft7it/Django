@@ -7,5 +7,5 @@ file = open('templates/footer.html')
 footer = file.read()
 
 print(header)
-print("<h1>Welcome to our Social !!</h1>")
+print("<h1>Welcome to our Social Mini !!!</h1>")
 print(footer)
