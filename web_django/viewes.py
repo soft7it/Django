@@ -24,7 +24,7 @@ def homePage(request):
     # HW: sort users by date descendendig list.sort()
     
     return HttpResponse( template.render({
-        
+        " last_users": users[:5]
     }, request) )
 
 
