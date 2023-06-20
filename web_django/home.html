@@ -1,15 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>homePage</title>
-</head>
-<body>
-    <h1>homePage</h1>
-    <h2>{{q}}</h2>
-</body>
-</html>
+{% extends 'layout.html' %}
+
+{% block content %}
+
+        <nav>
+            <a href="/">Home</a>*
+            <a href="/signup">Sign Up</a>*
+            <a href="/signin">Sing In</a>
+        </nav>
+        <h2>new users :</h2>
+        <ul>
+            {% for user in last_users %}
+                <li>{{ user.username }}</li>
+            {% endfor %}    
+        </ul>
+        <h2>Fresh posts :</h2>
+        <!-- 3 latest posts -->
+        <ul>
+            {% for post in last_posts %}
+            <li>{{ post.title }}</li>
+            {% endfor %}
+        </ul>
+
+{% endblock %}
 
 <!-- shift + 1 +Tab ->create new  document-->
