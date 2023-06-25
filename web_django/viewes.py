@@ -5,6 +5,8 @@ from django.template import loader
 from random import *#randint
 # import secrets
 
+from.models import Post
+
 
 # aka database
 
@@ -18,13 +20,46 @@ users = [
     {"username": "wiska", "created": "2000-01-07"},
 ]
 
+posts = [
+    { 'title': 'First title', 'created': '2001-01-01'},
+    { 'title': 'Second title', 'created': '2001-01-02'},
+    { 'title': 'Third title', 'created': '2001-01-03'},
+    { 'title': 'Fourth title', 'created': '2001-01-04'},
+    { 'title': 'Fifth title', 'created': '2001-01-05'},
+]
+
 def homePage(request):
     template = loader.get_template("home.html")
     
     # HW: sort users by date descendendig list.sort()
+    #     sort posts by date 
+    # ########################################     
+    # def get_newest(element):
+    #     return element['created']
+    # users.sort(key=get_newest, reverse=True)
+    ##########################################
+    users.sort(key=lambda element: element['created'], reverse=True)
     
     return HttpResponse( template.render({
-        " last_users": users[:5]
+        
+        "last_users": users[:5], # imi da numai cu bucata 5 bucati
+        "last_posts": posts[:3]  # imi da numai cu bucata 5 bucati
+    }, request) )
+
+def signupPage(request):
+    template = loader.get_template("signup.html")
+          
+    
+    return HttpResponse( template.render({
+        
+    }, request) )
+
+def signinPage(request):
+    template = loader.get_template("signin.html")
+         
+    
+    return HttpResponse( template.render({
+        
     }, request) )
 
 
@@ -48,3 +83,23 @@ def profilePage(request):
 
 def postsPage(request):
     return HttpResponse("Post`s page")
+
+# Post views:
+def addPost(request):
+    template = loader.get_template("add-post.html")        
+    
+    return HttpResponse( template.render({        
+    }, request) )
+
+def savePost(request): # httpRequest 
+
+    # print(request.GET['title'])  # QueryDict
+    # print(type(request.GET['title']))  # double check
+
+    title = request.GET['title']
+    body = request.GET['body']
+
+    post = Post(randint(100000, 200000), title, body)
+    post.save()
+
+    return HttpResponse( )
