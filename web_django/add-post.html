@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<nav>
+    <a href="/">Home</a>*
+    <a href="/signup">Sign Up</a>*
+    <a href="/signin">Sing In</a>
+</nav>
+<h2>Add post :</h2>
+<form action="/save-post">
+    <input name="title" type="text" placeholder="title"><br>
+    <input name="body" type="text" placeholder="body"><br>
+     
+    <button type="button">Save</button>
+</form>
+
+{% endblock %}
+<!-- shift + 1 +Tab ->create new  document-->
