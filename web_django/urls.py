@@ -9,5 +9,7 @@ urlpatterns = [
     path('signin', signinPage),
     # Post Routes
     path('add-post', addPost),
+    path('save-post', savePost),
+    path('get-posts', getPosts), # read post
     path('delete-post', deletePost),
 ]
