@@ -5,8 +5,8 @@ from django.template import loader
 from random import *#randint
 # import secrets
 
-from.models import Post
-
+from .models import Post
+ 
 
 # aka database
 
@@ -99,7 +99,19 @@ def savePost(request): # httpRequest
     title = request.GET['title']
     body = request.GET['body']
 
-    post = Post(randint(100000, 200000), title, body)
+    post = Post(randint(100000,200000),title,body)
     post.save()
 
-    return HttpResponse( )
+    return HttpResponse( 'Post saved successfully' )
+
+def deletePost(request): 
+    
+    id = request.GET['id']
+
+    # 1. find the post by id
+    post = Post.objects.get(pk=id)
+
+    # 2. delete
+    post.delete()
+
+    return HttpResponse( 'Post deleted successfully' )
