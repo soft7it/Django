@@ -1,6 +1,7 @@
 
 from django.http import HttpResponse
 from django.template import loader
+from django.shortcuts import redirect
 
 from random import *#randint
 # import secrets
@@ -90,6 +91,49 @@ def addPost(request):
     
     return HttpResponse( template.render({        
     }, request) )
+#####################################################
+def getPosts(request):
+    template = loader.get_template("get-posts.html")  
+
+    posts = Post.objects.all()
+
+    print(type(Post.objects))  # Manager
+    print(type(posts))  # QuerySet
+
+    return HttpResponse( template.render({ 
+        'posts' : posts       
+    }, request) )
+
+#######################################################
+def updatePost(request):
+    template = loader.get_template("update-post.html")        
+    
+    id = request.GET['id']
+
+    # 1. find the post by id
+    post = Post.objects.get(pk=id)
+    print(type(post))
+    return HttpResponse( template.render({ 
+        'post' : post       
+    }, request) )
+
+######################################################
+def changePost(request):       
+    
+    id = request.GET['id']
+    new_title = request.Get['title']
+    new_body = request.Get['body']
+
+    # 1. find the post by id
+    post = Post.objects.get(pk=id)
+    # print(type(post))
+    post.title = new_title
+    post.body = new_body
+
+    post.save()
+
+    return HttpResponse( 'Post update succesfully' )
+#######################################################
 
 def savePost(request): # httpRequest 
 
@@ -102,8 +146,9 @@ def savePost(request): # httpRequest
     post = Post(randint(100000,200000),title,body)
     post.save()
 
-    return HttpResponse( 'Post saved successfully' )
+    return redirect( '/get-posts' )
 
+########################################################
 def deletePost(request): 
     
     id = request.GET['id']
