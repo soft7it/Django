@@ -121,8 +121,8 @@ def updatePost(request):
 def changePost(request):       
     
     id = request.GET['id']
-    new_title = request.Get['title']
-    new_body = request.Get['body']
+    new_title = request.GET['title']
+    new_body = request.GET['body']
 
     # 1. find the post by id
     post = Post.objects.get(pk=id)
