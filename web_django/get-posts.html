@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<nav>
+    <a href="/">Home</a>*
+    <a href="/signup">Sign Up</a>*
+    <a href="/signin">Sing In</a>
+</nav>
+<h2>Posts :</h2>
+<ul>
+    {% for post in posts %}
+    <li>
+        {{ post.title }}
+    </li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}
+<!-- shift + 1 +Tab ->create new  document-->
