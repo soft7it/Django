@@ -12,4 +12,6 @@ urlpatterns = [
     path('save-post', savePost),
     path('get-posts', getPosts), # read post
     path('delete-post', deletePost),
+    path('update-post', updatePost),
+    path('change-post', changePost),
 ]
