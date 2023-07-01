@@ -85,7 +85,7 @@ def profilePage(request):
 def postsPage(request):
     return HttpResponse("Post`s page")
 
-# Post views:
+# Post views:#######################################
 def addPost(request):
     template = loader.get_template("add-post.html")        
     
@@ -132,7 +132,9 @@ def changePost(request):
 
     post.save()
 
-    return HttpResponse( 'Post update succesfully' )
+    return redirect( '/get-posts' )
+
+    # return HttpResponse( 'Post update succesfully' )                 
 #######################################################
 
 def savePost(request): # httpRequest 
