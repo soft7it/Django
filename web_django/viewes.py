@@ -7,6 +7,8 @@ from random import *#randint
 # import secrets
 
 from .models import Post
+
+from django.contrib.auth.models import User
  
 
 # aka database
@@ -161,4 +163,22 @@ def deletePost(request):
     # 2. delete
     post.delete()
 
-    return HttpResponse( 'Post deleted successfully' )
+    return HttpResponse( 'Post deleted successfully' )  #   http://127.0.0.1:8000/delete-post?id=
+
+
+# User views:#######################################
+def registerUser(request):
+    if request.method == 'GET':
+        template = loader.get_template("user/register.html")        
+        
+        return HttpResponse( template.render({ }, request)) 
+    elif request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm_password = request.POST['username']
+
+        User.objects.create_user(username, email, password)
+
+        return HttpResponse('Account created succesfully.')   
+   
