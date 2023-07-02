@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h2>CREATE YOUR ACCOUNT :</h2>
+<form action="/user/register" method="POST">
+    <input
+      name="username"
+      type="text"
+      placeholder="choose username ..."><br>
+    <input
+      name="email" 
+      type="email" 
+      placeholder="enter email ..."><br>
+    <input
+      name="password"
+      type="password"
+      placeholder="choose password ..."><br>
+      <!-- TODO ? add eye -->
+    <input
+      name="confirm_password"
+      type="password"
+      placeholder="confirm password ..."><br>
+    <button>CREAATE</button><br>
+</form>
+
+{% endblock %}
+<!-- shift + 1 +Tab ->create new  document-->
