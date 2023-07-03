@@ -14,4 +14,10 @@ urlpatterns = [
     path('delete-post', deletePost),
     path('update-post', updatePost),
     path('change-post', changePost),
+
+
+    #  user routes
+    path("user/register", registerUser),
+    path("user/login", loginUser),
+    path("user/logout", logoutUser),
 ]
