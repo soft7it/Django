@@ -9,6 +9,7 @@ from random import *#randint
 from .models import Post
 
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
  
 
 # aka database
@@ -46,7 +47,8 @@ def homePage(request):
     return HttpResponse( template.render({
         
         "last_users": users[:5], # imi da numai cu bucata 5 bucati
-        "last_posts": posts[:3]  # imi da numai cu bucata 5 bucati
+        "last_posts": posts[:3],  # imi da numai cu bucata 5 bucati
+        "user": request.user
     }, request) )
 
 def signupPage(request):
@@ -179,6 +181,32 @@ def registerUser(request):
         confirm_password = request.POST['username']
 
         User.objects.create_user(username, email, password)
+        
+        # if password and confirm_password and password != confirm_password:
 
-        return HttpResponse('Account created succesfully.')   
-   
+        #     return redirect( 'register' )              
+
+        # return HttpResponse('Account created succesfully.')
+        return redirect('/')
+
+    # User login views:#######################################
+def loginUser(request):
+    if request.method == 'GET':
+        template = loader.get_template("user/login.html")         
+        return HttpResponse( template.render({ }, request))
+     
+    elif request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            return redirect('/user/login')
+        
+        login(request, user)
+        return redirect('/')
+    
+    # User login views:#######################################
+def logoutUser(request):
+    logout(request)
+    return redirect("/") 
