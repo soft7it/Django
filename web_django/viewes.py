@@ -199,7 +199,8 @@ def loginUser(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-
+        print(user)
+        print(type(user))
         if user is None:
             return redirect('/user/login')
         
@@ -209,4 +210,4 @@ def loginUser(request):
     # User login views:#######################################
 def logoutUser(request):
     logout(request)
-    return redirect("/") 
+    return redirect("/")
