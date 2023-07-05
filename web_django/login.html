@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h2>ACCES YOUR ACCOUNT :</h2>
+<form action="/user/login" method="POST">
+    <input 
+        name="username" 
+        type="text"
+        placeholder="enter username"><br>
+   
+    <input 
+        name="password" 
+        type="password" 
+        placeholder="enter password"><br>
+    <!-- TODO ? add eye -->
+
+    {% csrf_token %}
+    <button>Enter</button><br>
+</form>
+
+{% endblock %}
+<!-- shift + 1 +Tab ->create new  document-->
