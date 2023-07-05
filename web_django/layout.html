@@ -11,12 +11,15 @@
     <!-- 5 new users -->
     <h1 style="text-align: center;">welcome to mini social</h1>
 
+    {% block topbar %}
+    {% endblock %}
+
     <div style="width: 60%; margin: 10px auto;">
-        <!-- <nav>
+        <nav>
             <a href="/">Home</a>*
-            <a href="/signup">Sign Up</a>*
-            <a href="/signin">Sing In</a>
-        </nav> -->
+            <a href="/user/register">Sign Up</a>*
+            <a href="/user/login">Sing In</a>
+        </nav>
         {% block content %}
         {% comment %} here child template will insert content {% endcomment %}
         {% endblock %}
