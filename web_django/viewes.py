@@ -180,14 +180,20 @@ def registerUser(request):
         password = request.POST['password']
         confirm_password = request.POST['username']
 
-        User.objects.create_user(username, email, password)
+        # User.objects.create_user(username, email, password)
         
-        # if password and confirm_password and password != confirm_password:
+        # # if password and confirm_password and password != confirm_password:
 
-        #     return redirect( 'register' )              
+        # #     return redirect( '/register' )              
 
-        # return HttpResponse('Account created succesfully.')
-        return redirect('/')
+        # # return HttpResponse('Account created succesfully.')
+        # return redirect('/')
+        if password == confirm_password:
+            User.objects.create_user(username, email, password)
+            return redirect('/')
+        else:
+            return redirect( 'register' ) 
+            # return HttpResponse('Passwords do not match.')
 
     # User login views:#######################################
 def loginUser(request):
@@ -210,4 +216,4 @@ def loginUser(request):
     # User login views:#######################################
 def logoutUser(request):
     logout(request)
-    return redirect("/")
+    return redirect("/")   
