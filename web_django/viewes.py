@@ -192,7 +192,7 @@ def registerUser(request):
             User.objects.create_user(username, email, password)
             return redirect('/')
         else:
-            return redirect( 'register' ) 
+            return redirect( '/user/register' ) 
             # return HttpResponse('Passwords do not match.')
 
     # User login views:#######################################
