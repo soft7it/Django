@@ -188,12 +188,13 @@ def registerUser(request):
 
         # # return HttpResponse('Account created succesfully.')
         # return redirect('/')
-        if password == confirm_password:
+      if password != confirm_password:
+            # return redirect( '/user/register' ) 
+            return HttpResponse('Passwords do not match.')
+        elif password == confirm_password:
             User.objects.create_user(username, email, password)
             return redirect('/')
-        else:
-            return redirect( '/user/register' ) 
-            # return HttpResponse('Passwords do not match.')
+        
 
     # User login views:#######################################
 def loginUser(request):
