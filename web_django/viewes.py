@@ -172,29 +172,20 @@ def deletePost(request):
 def registerUser(request):
     if request.method == 'GET':
         template = loader.get_template("user/register.html")        
-        
         return HttpResponse( template.render({ }, request)) 
+    
     elif request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
         confirm_password = request.POST['username']
 
-        # User.objects.create_user(username, email, password)
-        
-        # # if password and confirm_password and password != confirm_password:
-
-        # #     return redirect( '/register' )              
-
-        # # return HttpResponse('Account created succesfully.')
-        # return redirect('/')
-      if password != confirm_password:
-            # return redirect( '/user/register' ) 
-            return HttpResponse('Passwords do not match.')
-        elif password == confirm_password:
+        if password == confirm_password:
             User.objects.create_user(username, email, password)
             return redirect('/')
-        
+        else:
+            # return redirect( '/user/register' ) 
+            return redirect('/user/register')
 
     # User login views:#######################################
 def loginUser(request):
@@ -217,4 +208,4 @@ def loginUser(request):
     # User login views:#######################################
 def logoutUser(request):
     logout(request)
-    return redirect("/")   
+    return redirect("/")    
