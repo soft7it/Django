@@ -10,7 +10,10 @@ from .models import Post
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
- 
+
+from django.contrib import messages 
+
+import re
 
 # aka database
 
@@ -176,12 +179,22 @@ def registerUser(request):
     
     elif request.method == 'POST':
         username = request.POST['username']
-        email = request.POST['email']
+        
+        email = request.POST['email']   # regex
+        # pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        # if re.match(pattern, email):
+        #     pass
+        # else:
+        #     messages.error(request, 'Wrong credential.')
+        #     return redirect('/user/login')
+        # *********************************
+        
         password = request.POST['password']
         confirm_password = request.POST['username']
 
         if password == confirm_password:
             User.objects.create_user(username, email, password)
+            messages.success(request, 'Create account succesful.')
             return redirect('/')
         else:
             # return redirect( '/user/register' ) 
@@ -189,9 +202,12 @@ def registerUser(request):
 
     # User login views:#######################################
 def loginUser(request):
+    # req ----> FORM
     if request.method == 'GET':
-        template = loader.get_template("user/login.html")         
-        return HttpResponse( template.render({ }, request))
+        template = loader.get_template("user/login.html")
+        # message = request.session.get('error_message', None)         
+        # return HttpResponse( template.render({ 'message': message }, request))
+        return HttpResponse( template.render({}, request))
      
     elif request.method == 'POST':
         username = request.POST['username']
@@ -199,10 +215,15 @@ def loginUser(request):
         user = authenticate(username=username, password=password)
         print(user)
         print(type(user))
+        # req -------> AUTH
         if user is None:
+            # request.session['error_message'] = 'Wrong credential.'
+            messages.error(request, 'Wrong credential.')
             return redirect('/user/login')
         
         login(request, user)
+        # request.session.pop('error_message')
+        messages.success(request, 'Login succesful.')
         return redirect('/')
     
     # User login views:#######################################
