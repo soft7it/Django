@@ -41,6 +41,7 @@ psql -U postgres
 \l
 \c django_social
 \d
+\d mini_social_post
 
 CREATE DATABASE django_social;
 
@@ -48,8 +49,25 @@ app/manage.py makemigrations mini_social
 
 app/manage.py migrate
 
-\d mini_social_person
+\d mini_social_post
 
 https://docs.djangoproject.com/en/4.2/topics/db/queries/
 
 SELECT * FROM mini_social_post;
+
+DELETE FROM mini_social_post;
+
+https://docs.djangoproject.com/en/4.2/howto/csrf/
+
+https://docs.djangoproject.com/en/4.2/topics/auth/default/
+
+SELECT * FROM auth_user;
+
+SELECT * FROM auth_user;
+SELECT * FROM django_session;
+
+DELETE FROM auth_user;
+
+https://docs.djangoproject.com/en/4.2/topics/http/sessions/
+
+https://docs.djangoproject.com/en/4.2/ref/contrib/messages/
