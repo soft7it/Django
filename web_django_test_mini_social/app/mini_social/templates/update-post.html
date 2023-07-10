@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<!-- 
+<nav>
+    <a href="/">Home</a>*
+    <a href="/signup">Sign Up</a>*
+    <a href="/signin">Sing In</a>
+</nav> -->
+<h2>Update post :</h2>
+<form action="/change-post">
+    <input name="id" type="hidden" placeholder="title" value="{{post.id}}"><br>
+    <input name="title" type="text" placeholder="title" value="{{post.title}}"><br>
+    <input name="body" type="text" placeholder="body" value="{{post.body}}"><br>
+
+    <button>Save</button><br>
+</form>
+
+{% endblock %}
+<!-- shift + 1 +Tab ->create new  document-->

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <!-- 5 new users -->
+    <h1 style="text-align: center;">welcome to mini social</h1>
+
+    {% block topbar %}
+    {% endblock %}
+
+    <div style="width: 60%; margin: 10px auto;">
+        <nav>
+            <a href="/">Home</a>*
+            <a href="/user/register">Sign Up</a>*
+            <a href="/user/login">Sing In</a>
+        </nav>
+        {% block content %}
+        {% comment %} here child template will insert content {% endcomment %}
+        {% endblock %}
+    </div>
+    {% comment %} V HW: year automaticly {% endcomment %}
+    <p style="text-align: center;">&copy; {% now "Y" %}, SOCIAL INC.</p>
+    
+</body>
+
+</html>

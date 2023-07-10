@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block topbar %}
+    {% if user.is_authenticated %}
+        Welcome {{ user.username }}
+        <a href="/user/logout">Sign out</a>
+        <br>
+        <!-- on/off notification -->
+        <form action="/user/preferences/notifications">
+            <label>
+                <input type="checkbox" name="toggle" 
+                {% if show_notifications %} checked {% endif %}>
+                notifications
+            </label>
+            <button>SAVE</button>
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div style="color: red; padding: 10px; border: 3px solid red; margin-bottom: 10px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+                {% if message.tags == 'success' %}
+                    <div style="color: green; padding: 10px; border: 3px solid green; margin-bottom: 10px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <h2>new users :</h2>
+        <ul>
+            {% for user in last_users %}
+                <li>{{ user.username }}</li>
+            {% endfor %}    
+        </ul>
+        <h2>Fresh posts :</h2>
+        <!-- 3 latest posts -->
+        <ul>
+            {% for post in last_posts %}
+            <li>{{ post.title }}</li>
+            {% endfor %}
+        </ul>
+
+{% endblock %}
+
+<!-- shift + 1 +Tab ->create new  document-->

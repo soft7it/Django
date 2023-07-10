@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h2>Add post :</h2>
+<form action="/save-post">
+    <input name="title" type="text" placeholder="title"><br>
+    <input name="body" type="text" placeholder="body"><br>
+     
+    <button >Save</button><br>
+</form>
+
+{% endblock %}
+<!-- shift + 1 +Tab ->create new  document-->
