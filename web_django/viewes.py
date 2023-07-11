@@ -190,7 +190,7 @@ def registerUser(request):
         # *********************************
         
         password = request.POST['password']
-        confirm_password = request.POST['username']
+        confirm_password = request.POST['password']
 
         if password == confirm_password:
             User.objects.create_user(username, email, password)
