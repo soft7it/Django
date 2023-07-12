@@ -46,12 +46,14 @@ def homePage(request):
     # users.sort(key=get_newest, reverse=True)
     ##########################################
     users.sort(key=lambda element: element['created'], reverse=True)
+    show_notifications = request.session.get('show_notifications', None)
     
     return HttpResponse( template.render({
         
         "last_users": users[:5], # imi da numai cu bucata 5 bucati
         "last_posts": posts[:3],  # imi da numai cu bucata 5 bucati
-        "user": request.user
+        "user": request.user,
+        "show_notifications": show_notifications,
     }, request) )
 
 def signupPage(request):
@@ -181,24 +183,28 @@ def registerUser(request):
         username = request.POST['username']
         
         email = request.POST['email']   # regex
-        # pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
-        # if re.match(pattern, email):
-        #     pass
-        # else:
-        #     messages.error(request, 'Wrong credential.')
-        #     return redirect('/user/login')
-        # *********************************
+        pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        if re.match(pattern, email):        
         
-        password = request.POST['password']
-        confirm_password = request.POST['password']
+            password = request.POST['password']
+            confirm_password = request.POST['password']
 
-        if password == confirm_password:
-            User.objects.create_user(username, email, password)
-            messages.success(request, 'Create account succesful.')
-            return redirect('/')
+            if password == confirm_password:
+                User.objects.create_user(username, email, password)
+                messages.success(request, 'Create account succesful.')
+                ##  redirect to main mage after create account
+                username = request.POST['username']
+                password = request.POST['password']
+                user = authenticate(username=username, password=password)
+                login(request, user)# end
+                return redirect('/')
         else:
-            # return redirect( '/user/register' ) 
+            messages.error(request, 'Wrong credential.')
             return redirect('/user/register')
+    else:
+        messages.error(request, 'Wrong credential.')
+        return redirect('/user/register')        
+    # *********************************
 
     # User login views:#######################################
 def loginUser(request):
@@ -226,7 +232,19 @@ def loginUser(request):
         messages.success(request, 'Login succesful.')
         return redirect('/')
     
+def toggleUserNotification(request):
+    toggle = request.GET.get('toggle', None)
+    # Post.get()
+    if not toggle:
+        request.session['show_notifications'] = False
+    else:    
+        request.session['show_notifications'] = True
+
+    return redirect('/')
+    
     # User login views:#######################################
 def logoutUser(request):
-    logout(request)
-    return redirect("/")    
+    show_notifications = request.session.get('show_notifications', None)
+    logout(request)  # session.flush()
+    request.session['show_notifications'] = show_notifications
+    return redirect("/")  
