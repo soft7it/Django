@@ -174,63 +174,128 @@ def deletePost(request):
 
 
 # User views:#######################################
+# def registerUser(request):
+#     if request.method == 'GET':
+#         template = loader.get_template("user/register.html")        
+#         return HttpResponse( template.render({ }, request)) 
+    
+#     elif request.method == 'POST':
+#         username = request.POST['username']
+        
+#         email = request.POST['email']   # regex
+#         pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+#         if re.match(pattern, email):        
+        
+#             password = request.POST['password']
+#             confirm_password = request.POST['password']
+
+#             if password == confirm_password:
+#                 User.objects.create_user(username, email, password)
+#                 messages.success(request, 'Create account succesful.')
+#                 ##  redirect to main mage after create account
+                
+#                 user = authenticate(username=username, password=password)
+#                 login(request, user)# end
+#                 return redirect('/')
+#         else:
+#             messages.error(request, 'Wrong credential.')
+#             return redirect('/user/register')
+#     else:
+#         messages.error(request, 'Wrong credential.')
+#         return redirect('/user/register')        
+#     # *********************************
+
 def registerUser(request):
     if request.method == 'GET':
-        template = loader.get_template("user/register.html")        
-        return HttpResponse( template.render({ }, request)) 
+        template = loader.get_template("user/register.html")
+        return HttpResponse(template.render({}, request))
     
     elif request.method == 'POST':
-        username = request.POST['username']
-        
-        email = request.POST['email']   # regex
-        pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
-        if re.match(pattern, email):        
-        
-            password = request.POST['password']
-            confirm_password = request.POST['password']
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
 
-            if password == confirm_password:
-                User.objects.create_user(username, email, password)
-                messages.success(request, 'Create account succesful.')
-                ##  redirect to main mage after create account
-                username = request.POST['username']
-                password = request.POST['password']
-                user = authenticate(username=username, password=password)
-                login(request, user)# end
-                return redirect('/')
-        else:
-            messages.error(request, 'Wrong credential.')
+        if not username or not email or not password or not confirm_password:
+            messages.error(request, 'Please fill in all the fields.')
+            return redirect('/user/register')
+
+        # Validate email format
+        pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        if not re.match(pattern, email):
+            messages.error(request, 'Invalid email format.')
+            return redirect('/user/register')
+
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+            return redirect('/user/register')
+        try:
+            # Create user
+            user = User.objects.create_user(username, email, password)
+            messages.success(request, 'Account created successfully.')            
+            # Authenticate and log in the user
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('/')
+        
+        except Exception as e:
+            messages.error(request, f'An error occurred  {str(e)} .')
             return redirect('/user/register')
     else:
-        messages.error(request, 'Wrong credential.')
-        return redirect('/user/register')        
-    # *********************************
+        messages.error(request, 'Invalid request method.')
+        return redirect('/user/register')
 
     # User login views:#######################################
+# def loginUser(request):
+#     # req ----> FORM
+#     if request.method == 'GET':
+#         template = loader.get_template("user/login.html")
+#         # message = request.session.get('error_message', None)         
+#         # return HttpResponse( template.render({ 'message': message }, request))
+#         return HttpResponse( template.render({}, request))
+     
+#     elif request.method == 'POST':
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(username=username, password=password)
+#         print(user)
+#         print(type(user))
+#         # req -------> AUTH
+#         if user is None:
+#             # request.session['error_message'] = 'Wrong credential.'
+#             messages.error(request, 'Wrong credential.')
+#             return redirect('/user/login')
+        
+#         login(request, user)
+#         # request.session.pop('error_message')
+#         messages.success(request, 'Login succesful.')
+#         return redirect('/')
 def loginUser(request):
-    # req ----> FORM
     if request.method == 'GET':
         template = loader.get_template("user/login.html")
-        # message = request.session.get('error_message', None)         
-        # return HttpResponse( template.render({ 'message': message }, request))
-        return HttpResponse( template.render({}, request))
+        return HttpResponse(template.render({}, request))
      
     elif request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        print(user)
-        print(type(user))
-        # req -------> AUTH
-        if user is None:
-            # request.session['error_message'] = 'Wrong credential.'
-            messages.error(request, 'Wrong credential.')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if not (username and password):
+            messages.error(request, 'Please provide both username and password.')
             return redirect('/user/login')
-        
+
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            messages.error(request, 'Wrong credentials. Please try again.')
+            return redirect('/user/login')
+
         login(request, user)
-        # request.session.pop('error_message')
-        messages.success(request, 'Login succesful.')
+        messages.success(request, 'Login successful.')
         return redirect('/')
+
+    else:
+        messages.error(request, 'Invalid request method.')
+        return redirect('/user/login')
     
 def toggleUserNotification(request):
     toggle = request.GET.get('toggle', None)
@@ -247,4 +312,4 @@ def logoutUser(request):
     show_notifications = request.session.get('show_notifications', None)
     logout(request)  # session.flush()
     request.session['show_notifications'] = show_notifications
-    return redirect("/")  
+    return redirect("/")    
