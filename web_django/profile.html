@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h2>User profile :</h2>
+    {% if profileUser.id == visitingUser.id %}
+    {{user.is_authenticated}} <!-- check debug -->
+    {{user.id}} <!-- check debug -->
+    {{id}} <!-- check debug -->
+        <div><a href="/user/profile/edit/{{profileUser.id}}">Edit</a></div>
+    {% endif %}
+<h3>{{profileUser.username}} ({{visitingUser.email}})</h3>
+
+<!-- to use crsf token -->
+    <!-- {% csrf_token %} -->
+
+{% endblock %}
+<!-- shift + 1 +Tab ->create new  document-->
