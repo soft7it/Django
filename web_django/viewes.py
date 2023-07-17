@@ -1,5 +1,5 @@
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.template import loader
 from django.shortcuts import redirect
 
@@ -9,7 +9,7 @@ from random import *#randint
 from .models import Post
 
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user
 
 from django.contrib import messages 
 
@@ -307,9 +307,68 @@ def toggleUserNotification(request):
 
     return redirect('/')
     
-    # User login views:#######################################
+#     User login views:#######################################
 def logoutUser(request):
     show_notifications = request.session.get('show_notifications', None)
-    logout(request)  # session.flush()
+    logout(request)  # 
+    request.session.flush() # foteaza stergerea datelor
     request.session['show_notifications'] = show_notifications
-    return redirect("/")    
+    messages.success(request, 'Logout successful.')
+    return redirect("/")  
+#  
+# def logoutUser(request):
+#     show_notifications = request.session.get('show_notifications', None)
+#     request.session.flush()
+#     request.session['show_notifications'] = show_notifications
+#     logout(request)
+#     return redirect("/")
+
+# def logoutUser(request):
+#     messages.success(request, 'Logout successful.')
+#     logout(request)
+#     return redirect("/") 
+
+
+def userProfile(request, id):
+    profileUser = User.objects.get(pk=id)
+    print(profileUser)
+    visitingUser = get_user(request)
+    print(visitingUser)
+    if request.method == 'GET':
+        print("Profile of user:", id)
+        template = loader.get_template("user/profile.html")
+        return HttpResponse(template.render({
+            'profileUser' : profileUser,
+            'visitingUser' : visitingUser
+            }, request))
+
+def editUserProfile(request, id):
+    
+    if request.method == 'GET':
+        profileUser = User.objects.get(pk=id)
+        print(profileUser)
+        visitingUser = get_user(request)
+        print(visitingUser)
+        if profileUser.id == visitingUser.id:
+            template = loader.get_template("user/edit-profile.html")
+            return HttpResponse(template.render({
+                'profileUser' : profileUser,
+                }, request))
+        else:
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)')
+        
+    elif request.method == 'POST':
+        profileUser = User.objects.get(pk=id)
+            
+        visitingUser = get_user(request)
+        if profileUser.id == visitingUser.id:
+                   
+            avatar = request.FILES['avatar']
+            avatar_file = open (f'app/uploads/{avatar}', 'wb+')
+            for chunk in avatar.chunks():
+                avatar_file.write(chunk)
+
+            avatar_file.close()
+            return HttpResponse('Saved')
+        else:
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)') 
