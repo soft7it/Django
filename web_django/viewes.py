@@ -8,7 +8,8 @@ from random import *#randint
 
 from .models import Post
 
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from .models import CustumerUser
 from django.contrib.auth import authenticate, login, logout, get_user
 
 from django.contrib import messages 
@@ -231,7 +232,7 @@ def registerUser(request):
             return redirect('/user/register')
         try:
             # Create user
-            user = User.objects.create_user(username, email, password)
+            user = CustumerUser.objects.create_user(username, email, password)
             messages.success(request, 'Account created successfully.')            
             # Authenticate and log in the user
             user = authenticate(username=username, password=password)
@@ -330,7 +331,7 @@ def logoutUser(request):
 
 
 def userProfile(request, id):
-    profileUser = User.objects.get(pk=id)
+    profileUser = CustumerUser.objects.get(pk=id)
     print(profileUser)
     visitingUser = get_user(request)
     print(visitingUser)
@@ -345,7 +346,7 @@ def userProfile(request, id):
 def editUserProfile(request, id):
     
     if request.method == 'GET':
-        profileUser = User.objects.get(pk=id)
+        profileUser = CustumerUser.objects.get(pk=id)
         print(profileUser)
         visitingUser = get_user(request)
         print(visitingUser)
@@ -358,7 +359,7 @@ def editUserProfile(request, id):
             return HttpResponseForbidden('Acces Denied, idi guleai...:)')
         
     elif request.method == 'POST':
-        profileUser = User.objects.get(pk=id)
+        profileUser = CustumerUser.objects.get(pk=id)
             
         visitingUser = get_user(request)
         if profileUser.id == visitingUser.id:
@@ -369,6 +370,8 @@ def editUserProfile(request, id):
                 avatar_file.write(chunk)
 
             avatar_file.close()
+            profileUser.avatar = f'app/uploads/{avatar}'
+            profileUser.save()
             return HttpResponse('Saved')
         else:
-            return HttpResponseForbidden('Acces Denied, idi guleai...:)') 
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)')  
