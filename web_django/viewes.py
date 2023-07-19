@@ -9,7 +9,7 @@ from random import *#randint
 from .models import Post
 
 # from django.contrib.auth.models import User
-from .models import CustumerUser
+from .models import CustomUser
 from django.contrib.auth import authenticate, login, logout, get_user
 
 from django.contrib import messages 
@@ -232,7 +232,7 @@ def registerUser(request):
             return redirect('/user/register')
         try:
             # Create user
-            user = CustumerUser.objects.create_user(username, email, password)
+            user = CustomUser.objects.create_user(username, email, password)
             messages.success(request, 'Account created successfully.')            
             # Authenticate and log in the user
             user = authenticate(username=username, password=password)
@@ -331,7 +331,7 @@ def logoutUser(request):
 
 
 def userProfile(request, id):
-    profileUser = CustumerUser.objects.get(pk=id)
+    profileUser = CustomUser.objects.get(pk=id)
     print(profileUser)
     visitingUser = get_user(request)
     print(visitingUser)
@@ -346,7 +346,7 @@ def userProfile(request, id):
 def editUserProfile(request, id):
     
     if request.method == 'GET':
-        profileUser = CustumerUser.objects.get(pk=id)
+        profileUser = CustomUser.objects.get(pk=id)
         print(profileUser)
         visitingUser = get_user(request)
         print(visitingUser)
@@ -359,19 +359,19 @@ def editUserProfile(request, id):
             return HttpResponseForbidden('Acces Denied, idi guleai...:)')
         
     elif request.method == 'POST':
-        profileUser = CustumerUser.objects.get(pk=id)
+        profileUser = CustomUser.objects.get(pk=id)
             
         visitingUser = get_user(request)
         if profileUser.id == visitingUser.id:
                    
             avatar = request.FILES['avatar']
-            avatar_file = open (f'app/uploads/{avatar}', 'wb+')
+            avatar_file = open (f'app/public/uploads/{avatar}', 'wb+')
             for chunk in avatar.chunks():
                 avatar_file.write(chunk)
 
             avatar_file.close()
-            profileUser.avatar = f'app/uploads/{avatar}'
+            profileUser.avatar = f'uploads/{avatar}'
             profileUser.save()
-            return HttpResponse('Saved')
+            return redirect(f'/user/profile/{profileUser.id}')
         else:
-            return HttpResponseForbidden('Acces Denied, idi guleai...:)')  
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)') 
