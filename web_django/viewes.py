@@ -333,21 +333,39 @@ def logoutUser(request):
 def userProfile(request, id):
     profileUser = CustomUser.objects.get(pk=id)
     print(profileUser)
-    visitingUser = get_user(request)
+    visitingUser = get_user(request) # User
+    visitingUser = CustomUser.objects.get(pk=visitingUser.id)
     print(visitingUser)
     if request.method == 'GET':
         print("Profile of user:", id)
         template = loader.get_template("user/profile.html")
+        userFriends = profileUser.friends.all()
+        profileUserIsNotVisitingUserFriend = visitingUser.friends.all().contains(profileUser)
+        print(profileUserIsNotVisitingUserFriend)
+        print(type(userFriends))
         return HttpResponse(template.render({
             'profileUser' : profileUser,
-            'visitingUser' : visitingUser
+            'visitingUser' : visitingUser,
+            'userFriends' : userFriends,
+            'profileUserIsNotVisitingUserFriend' : profileUserIsNotVisitingUserFriend
             }, request))
+
+def addUserFriend(request, id):
+    profileUser = CustomUser.objects.get(pk=id)
+    visitingUser = get_user(request) # User
+    visitingUser = CustomUser.objects.get(pk=visitingUser.id)
+    
+    visitingUser.friends.add(profileUser)
+    visitingUser.save()
+    
+    return redirect(f'/user/profile/{profileUser.id}')
 
 def editUserProfile(request, id):
     
     if request.method == 'GET':
         profileUser = CustomUser.objects.get(pk=id)
         print(profileUser)
+        # print(profileUser.friends.all())
         visitingUser = get_user(request)
         print(visitingUser)
         if profileUser.id == visitingUser.id:
@@ -374,4 +392,4 @@ def editUserProfile(request, id):
             profileUser.save()
             return redirect(f'/user/profile/{profileUser.id}')
         else:
-            return HttpResponseForbidden('Acces Denied, idi guleai...:)') 
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)')
