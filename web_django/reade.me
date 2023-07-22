@@ -63,6 +63,8 @@ https://docs.djangoproject.com/en/4.2/topics/auth/default/
 
 SELECT * FROM auth_user;
 
+SELECT id, username FROM auth_user;
+
 SELECT * FROM auth_user;
 SELECT * FROM django_session;
 
@@ -77,3 +79,34 @@ https://docs.djangoproject.com/en/4.2/ref/contrib/messages/
 https://docs.djangoproject.com/en/4.2/ref/request-response/#httpresponse-subclasses
 
 https://docs.djangoproject.com/en/4.2/topics/http/file-uploads/
+
+\d auth_user
+
+\d mini_social_customuser
+
+DELETE FROM mini_social_customuser;
+DELETE FROM auth_user;
+SELECT * FROM mini_social_customuser;
+
+https://docs.djangoproject.com/en/4.2/topics/db/examples/
+
+django relationships to same model
+psql -U postgres
+\l
+\c django_social
+\d
+
+\d mini_social_customuser
+\d mini_social_customuser_friends
+
+SELECT * FROM mini_social_customuser;
+SELECT * FROM auth_user;
+
+INSERT INTO mini_social_customuser_friends(from_customuser_id, to_customuser_id) VALUES( 49,50);
+INSERT INTO mini_social_customuser_friends(from_customuser_id, to_customuser_id) VALUES( 49,51);
+SELECT * FROM mini_social_customuser_friends;
+
+
+app/manage.py makemigrations mini_social
+
+app/manage.py migrate
