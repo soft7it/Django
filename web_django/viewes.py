@@ -89,11 +89,11 @@ def signinPage(request):
     
 #     return HttpResponse( template.render({'q': quote}, request) )
 
-def profilePage(request):
-    return HttpResponse("User`s page")
+# def profilePage(request):
+#     return HttpResponse("User`s page")
 
-def postsPage(request):
-    return HttpResponse("Post`s page")
+# def postsPage(request):
+#     return HttpResponse("Post`s page")
 
 # Post views:#######################################
 def addPost(request):
