@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% load static %}
 {% block content %}
 
 <h2>User profile :</h2>
@@ -9,10 +9,45 @@
     {{id}} <!-- check debug -->
         <div><a href="/user/profile/edit/{{profileUser.id}}">Edit</a></div>
     {% endif %}
-<h3>{{profileUser.username}} ({{visitingUser.email}})</h3>
-
+    <h3>{{profileUser.username}} ({{visitingUser.email}})
+        <!-- check if the user is in the friends list
+            if profileUser.id not in userFriends 
+        -->
+        <!-- {{profileUserIsNotVisitingUserFriend}} -->
+        {% if profileUser.id != visitingUser.id and not profileUserIsNotVisitingUserFriend%}
+            <a href="/user/add/friend/{{ profileUser.id}}">+ Friend</a>
+            
+        {% endif %}
+    </h3>
+    <img src="{% static profileUser.avatar %}" alt="" width="150">
+    {% if profileUser.id == visitingUser.id%}
+     <!-- # daca se uita in contul lui atunci apare settings-->
+        <h3>Settings</h3>
+            <!-- on/off notification -->
+            <form action="/user/preferences/notifications">
+                <label>
+                    <input type="checkbox" name="toggle" {% if show_notifications %} checked {% endif %}>
+                    notifications
+                </label>
+                <button>SAVE</button>
+            </form>
+    {% endif %}
 <!-- to use crsf token -->
     <!-- {% csrf_token %} -->
+    <h3>Friends:</h3>
+
+    <ul>
+        {% for friend in userFriends %}
+            <li>
+                <a href="/user/profile/{{friend.id}}">
+                    {{ friend.username }}
+                </a>
+                <a href="/user/remove/{{friend.id}}">
+                    Delete
+                </a>
+            </li>
+        {% endfor %}    
+    </ul>
 
 {% endblock %}
 <!-- shift + 1 +Tab ->create new  document-->
