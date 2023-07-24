@@ -299,6 +299,7 @@ def loginUser(request):
         return redirect('/user/login')
     
 def toggleUserNotification(request):
+    visitingUser = get_user(request)
     toggle = request.GET.get('toggle', None)
     # Post.get()
     if not toggle:
@@ -306,7 +307,7 @@ def toggleUserNotification(request):
     else:    
         request.session['show_notifications'] = True
 
-    return redirect('/')
+    return redirect(f'/user/prpfile/{visitingUser.id}')
     
 #     User login views:#######################################
 def logoutUser(request):
@@ -337,12 +338,12 @@ def userProfile(request, id):
     visitingUser = CustomUser.objects.get(pk=visitingUser.id)
     print(visitingUser)
     if request.method == 'GET':
-        print("Profile of user:", id)
+        # print("Profile of user:", id)
         template = loader.get_template("user/profile.html")
         userFriends = profileUser.friends.all()
         profileUserIsNotVisitingUserFriend = visitingUser.friends.all().contains(profileUser)
-        print(profileUserIsNotVisitingUserFriend)
-        print(type(userFriends))
+        # print(profileUserIsNotVisitingUserFriend)
+        # print(type(userFriends))
         return HttpResponse(template.render({
             'profileUser' : profileUser,
             'visitingUser' : visitingUser,
@@ -359,6 +360,22 @@ def addUserFriend(request, id):
     visitingUser.save()
     
     return redirect(f'/user/profile/{profileUser.id}')
+
+def removeUserFriend(request, id):
+    profileUser = CustomUser.objects.get(pk=id)
+    visitingUser = get_user(request) # User
+    visitingUser = CustomUser.objects.get(pk=visitingUser.id)
+    
+    # Check if the profileUser is in the visitingUser's friend list
+    if profileUser in visitingUser.friends.all():
+        visitingUser.friends.remove(profileUser)
+        visitingUser.save()
+        messages.success(request, f"You have removed {profileUser.username} from your friend list.")
+    else:
+        messages.error(request, f"{profileUser.username} is not in your friend list.")
+
+    return redirect(f'/user/profile/{profileUser.id}')
+
 
 def editUserProfile(request, id):
     
@@ -392,4 +409,4 @@ def editUserProfile(request, id):
             profileUser.save()
             return redirect(f'/user/profile/{profileUser.id}')
         else:
-            return HttpResponseForbidden('Acces Denied, idi guleai...:)')
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)')   
