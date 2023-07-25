@@ -366,14 +366,9 @@ def removeUserFriend(request, id):
     visitingUser = get_user(request) # User
     visitingUser = CustomUser.objects.get(pk=visitingUser.id)
     
-    # Check if the profileUser is in the visitingUser's friend list
-    if profileUser in visitingUser.friends.all():
-        visitingUser.friends.remove(profileUser)
-        visitingUser.save()
-        messages.success(request, f"You have removed {profileUser.username} from your friend list.")
-    else:
-        messages.error(request, f"{profileUser.username} is not in your friend list.")
-
+    visitingUser.friends.remove(profileUser)
+    visitingUser.save()
+        
     return redirect(f'/user/profile/{profileUser.id}')
 
 
@@ -409,4 +404,4 @@ def editUserProfile(request, id):
             profileUser.save()
             return redirect(f'/user/profile/{profileUser.id}')
         else:
-            return HttpResponseForbidden('Acces Denied, idi guleai...:)')   
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)')
