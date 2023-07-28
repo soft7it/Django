@@ -307,7 +307,7 @@ def toggleUserNotification(request):
     else:    
         request.session['show_notifications'] = True
 
-    return redirect(f'/user/prpfile/{visitingUser.id}')
+    return redirect(f'/user/profile/{visitingUser.id}')
     
 #     User login views:#######################################
 def logoutUser(request):
