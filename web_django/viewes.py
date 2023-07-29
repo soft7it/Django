@@ -12,7 +12,8 @@ from .models import Post
 from .models import CustomUser
 from django.contrib.auth import authenticate, login, logout, get_user
 
-from django.contrib import messages 
+from django.contrib import messages
+from django.contrib.sessions.models import Session
 
 import re
 
@@ -310,6 +311,7 @@ def loginUser(request):
     
 def toggleUserNotification(request):
     visitingUser = get_user(request)
+    
     toggle = request.GET.get('toggle', None)
     # Post.get()
     if not toggle:
@@ -328,7 +330,7 @@ def logoutUser(request):
 
     # 1. get all the current session data
     sesion = Session.objects.get(pk=request.session.session_key)
-    sesion_data = sesion.get_decoded()
+    session_data = sesion.get_decoded()
 
     # 2. serialize data in json
     session_data_json = json.dumps(session_data)
@@ -364,6 +366,7 @@ def logoutUser(request):
 
 def userProfile(request, id):
     profileUser = CustomUser.objects.get(pk=id)
+    show_notifications = request.session.get('show_notifications', None)
     print(profileUser)
     visitingUser = get_user(request) # User
     visitingUser = CustomUser.objects.get(pk=visitingUser.id)
@@ -379,7 +382,8 @@ def userProfile(request, id):
             'profileUser' : profileUser,
             'visitingUser' : visitingUser,
             'userFriends' : userFriends,
-            'profileUserIsNotVisitingUserFriend' : profileUserIsNotVisitingUserFriend
+            'profileUserIsNotVisitingUserFriend' : profileUserIsNotVisitingUserFriend,
+            'show_notifications' : show_notifications
             }, request))
 
 def addUserFriend(request, id):
