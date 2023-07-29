@@ -289,8 +289,18 @@ def loginUser(request):
         if user is None:
             messages.error(request, 'Wrong credentials. Please try again.')
             return redirect('/user/login')
-
+        
         login(request, user)
+
+        visitingUser = CustomUser.objects.get(pk=user.id)
+
+        # 1. load the backup data
+        session_data_backup = visitingUser.session_data_backup
+        session_data = json.loads(session_data_backup if session_data_backup else '{}')
+
+        # 2. put the data in current session
+        request.session.update(session_data)
+
         messages.success(request, 'Login successful.')
         return redirect('/')
 
@@ -308,15 +318,36 @@ def toggleUserNotification(request):
         request.session['show_notifications'] = True
 
     return redirect(f'/user/profile/{visitingUser.id}')
-    
+
+import json   
 #     User login views:#######################################
 def logoutUser(request):
-    show_notifications = request.session.get('show_notifications', None)
-    logout(request)  # 
-    request.session.flush() # foteaza stergerea datelor
-    request.session['show_notifications'] = show_notifications
-    messages.success(request, 'Logout successful.')
+    # show_notifications = request.session.get('show_notifications', None)
+    visitingUser = get_user(request)
+    visitingUser = CustomUser.objects.get(pk=visitingUser.id)
+
+    # 1. get all the current session data
+    sesion = Session.objects.get(pk=request.session.session_key)
+    sesion_data = sesion.get_decoded()
+
+    # 2. serialize data in json
+    session_data_json = json.dumps(session_data)
+
+    # 3. save to backup column in visiting user
+    visitingUser.session_data_backup = session_data_json
+    visitingUser.save()
+    
+    logout(request)
     return redirect("/")  
+    
+# #     User login views:#######################################
+# def logoutUser(request):
+#     show_notifications = request.session.get('show_notifications', None)
+#     logout(request)  # 
+#     request.session.flush() # foteaza stergerea datelor
+#     request.session['show_notifications'] = show_notifications
+#     messages.success(request, 'Logout successful.')
+#     return redirect("/")  
 #  
 # def logoutUser(request):
 #     show_notifications = request.session.get('show_notifications', None)
@@ -404,4 +435,4 @@ def editUserProfile(request, id):
             profileUser.save()
             return redirect(f'/user/profile/{profileUser.id}')
         else:
-            return HttpResponseForbidden('Acces Denied, idi guleai...:)')
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)') 
