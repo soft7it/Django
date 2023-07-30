@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<h2>User profile :</h2>
+    <h2>User profile :</h2>
     {% if profileUser.id == visitingUser.id %}
     {{user.is_authenticated}} <!-- check debug -->
     {{user.id}} <!-- check debug -->
@@ -26,23 +26,22 @@
             <!-- on/off notification -->
             <form action="/user/preferences/notifications">
                 <label>
-                    <input type="checkbox" name="toggle" {% if show_notifications %} checked {% endif %}>
+                    <input type="checkbox" name="toggle" {% if show_notifications %} checked {% endif %} value="1">
                     notifications
                 </label>
                 <button>SAVE</button>
             </form>
     {% endif %}
-<!-- to use crsf token -->
+    <!-- to use crsf token -->
     <!-- {% csrf_token %} -->
     <h3>Friends:</h3>
-
     <ul>
         {% for friend in userFriends %}
             <li>
                 <a href="/user/profile/{{friend.id}}">
                     {{ friend.username }}
                 </a>
-                <a href="/user/remove/friend/{{friend.id}}">
+                <a href="/user/remove/friend{{friend.id}}">
                     Delete
                 </a>
             </li>
