@@ -369,6 +369,7 @@ def userProfile(request, id):
     show_notifications = request.session.get('show_notifications', None)
     print(profileUser)
     visitingUser = get_user(request) # User
+    # visitingUser = CustomUser.objects.get(pk=profileUser.id)
     visitingUser = CustomUser.objects.get(pk=visitingUser.id)
     print(visitingUser)
     if request.method == 'GET':
@@ -379,11 +380,11 @@ def userProfile(request, id):
         # print(profileUserIsNotVisitingUserFriend)
         # print(type(userFriends))
         return HttpResponse(template.render({
-            'profileUser' : profileUser,
+            'profileUser' : profileUser,                
             'visitingUser' : visitingUser,
             'userFriends' : userFriends,
             'profileUserIsNotVisitingUserFriend' : profileUserIsNotVisitingUserFriend,
-            'show_notifications' : show_notifications
+            'show_notifications' : show_notifications,
             }, request))
 
 def addUserFriend(request, id):
@@ -439,4 +440,4 @@ def editUserProfile(request, id):
             profileUser.save()
             return redirect(f'/user/profile/{profileUser.id}')
         else:
-            return HttpResponseForbidden('Acces Denied, idi guleai...:)') 
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)')  
