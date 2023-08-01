@@ -369,7 +369,9 @@ def userProfile(request, id):
     show_notifications = request.session.get('show_notifications', None)
     print(profileUser)
     visitingUser = get_user(request) # User
-    # visitingUser = CustomUser.objects.get(pk=profileUser.id)
+    
+    visitingUser = CustomUser.objects.get(pk=profileUser.id)
+    
     visitingUser = CustomUser.objects.get(pk=visitingUser.id)
     print(visitingUser)
     if request.method == 'GET':
