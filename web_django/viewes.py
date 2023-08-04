@@ -97,6 +97,7 @@ def signinPage(request):
 #     return HttpResponse("Post`s page")
 
 # Post views:#######################################
+
 def addPost(request):
     template = loader.get_template("add-post.html")        
     
@@ -149,14 +150,16 @@ def changePost(request):
 #######################################################
 
 def savePost(request): # httpRequest 
-
+    visitingUser = get_user(request) # User
+    visitingUser = CustomUser.objects.get(pk=visitingUser.id)
     # print(request.GET['title'])  # QueryDict
     # print(type(request.GET['title']))  # double check
 
-    title = request.GET['title']
-    body = request.GET['body']
+    title = request.POST['title']
+    body = request.POST['body']
 
-    post = Post(randint(100000,200000),title,body)
+    post = Post(title=title, body=body, author=visitingUser)
+    # post = Post(randint(100000,200000),title,body)
     post.save()
 
     return redirect( '/get-posts' )
@@ -370,7 +373,7 @@ def userProfile(request, id):
     print(profileUser)
     visitingUser = get_user(request) # User
     
-    visitingUser = CustomUser.objects.get(pk=profileUser.id)
+    # visitingUser = CustomUser.objects.get(pk=profileUser.id)
     
     visitingUser = CustomUser.objects.get(pk=visitingUser.id)
     print(visitingUser)
@@ -404,10 +407,11 @@ def removeUserFriend(request, id):
     visitingUser = get_user(request) # User
     visitingUser = CustomUser.objects.get(pk=visitingUser.id)
     
-    visitingUser.friends.remove(profileUser)
+    visitingUser.friends.remove(profileUser.id)
+    # visitingUser.friends.remove(profileUser.id)
     visitingUser.save()
         
-    return redirect(f'/user/profile/{profileUser.id}')
+    return redirect(f'/user/profile/{visitingUser.id}')
 
 
 def editUserProfile(request, id):
@@ -442,4 +446,4 @@ def editUserProfile(request, id):
             profileUser.save()
             return redirect(f'/user/profile/{profileUser.id}')
         else:
-            return HttpResponseForbidden('Acces Denied, idi guleai...:)')  
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)')
