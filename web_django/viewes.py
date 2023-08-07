@@ -150,6 +150,9 @@ def changePost(request):
 #######################################################
 
 def savePost(request): # httpRequest 
+
+    # hw1 check if user is authenticated
+
     visitingUser = get_user(request) # User
     visitingUser = CustomUser.objects.get(pk=visitingUser.id)
     # print(request.GET['title'])  # QueryDict
@@ -162,6 +165,7 @@ def savePost(request): # httpRequest
     # post = Post(randint(100000,200000),title,body)
     post.save()
 
+    # hw2 redirect to it's profale
     return redirect( '/get-posts' )
 
 ########################################################
@@ -367,29 +371,34 @@ def logoutUser(request):
 #     return redirect("/") 
 
 
-def userProfile(request, id):
-    profileUser = CustomUser.objects.get(pk=id)
-    show_notifications = request.session.get('show_notifications', None)
-    print(profileUser)
-    visitingUser = get_user(request) # User
-    
-    # visitingUser = CustomUser.objects.get(pk=profileUser.id)
-    
-    visitingUser = CustomUser.objects.get(pk=visitingUser.id)
-    print(visitingUser)
+def userProfile(request, id, author_id):
+    # hw3 update user profile - so it shows all of it,s posts
     if request.method == 'GET':
+        profileUser = CustomUser.objects.get(pk=id)
+        show_notifications = request.session.get('show_notifications', None)
+        print(profileUser)
+        visitingUser = get_user(request) # User
+        
+        visitingUser = CustomUser.objects.get(pk=visitingUser.id)
+        print(visitingUser)
         # print("Profile of user:", id)
         template = loader.get_template("user/profile.html")
         userFriends = profileUser.friends.all()
         profileUserIsNotVisitingUserFriend = visitingUser.friends.all().contains(profileUser)
         # print(profileUserIsNotVisitingUserFriend)
         # print(type(userFriends))
+        # titles = Post.objects.all()
+        # titles = Post.objects.filter()
+        # Retrieve titles of posts by the profile user
+        # Assuming you want to filter posts by author_id
+        titles = Post.objects.filter(author_id=author_id).values_list('title', flat=True)
         return HttpResponse(template.render({
             'profileUser' : profileUser,                
             'visitingUser' : visitingUser,
             'userFriends' : userFriends,
             'profileUserIsNotVisitingUserFriend' : profileUserIsNotVisitingUserFriend,
             'show_notifications' : show_notifications,
+            'titles' : titles,
             }, request))
 
 def addUserFriend(request, id):
@@ -446,4 +455,4 @@ def editUserProfile(request, id):
             profileUser.save()
             return redirect(f'/user/profile/{profileUser.id}')
         else:
-            return HttpResponseForbidden('Acces Denied, idi guleai...:)')
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)')  
