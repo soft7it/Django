@@ -371,7 +371,7 @@ def logoutUser(request):
 #     return redirect("/") 
 
 
-def userProfile(request, id, author_id):
+def userProfile(request, id):
     # hw3 update user profile - so it shows all of it,s posts
     if request.method == 'GET':
         profileUser = CustomUser.objects.get(pk=id)
@@ -391,7 +391,9 @@ def userProfile(request, id, author_id):
         # titles = Post.objects.filter()
         # Retrieve titles of posts by the profile user
         # Assuming you want to filter posts by author_id
-        titles = Post.objects.filter(author_id=author_id).values_list('title', flat=True)
+        # titles = Post.objects.filter(author_id=author_id).values_list('title', flat=True)
+        titles = Post.objects.filter(author=id)
+        
         return HttpResponse(template.render({
             'profileUser' : profileUser,                
             'visitingUser' : visitingUser,
@@ -455,4 +457,4 @@ def editUserProfile(request, id):
             profileUser.save()
             return redirect(f'/user/profile/{profileUser.id}')
         else:
-            return HttpResponseForbidden('Acces Denied, idi guleai...:)')  
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)') 
