@@ -1,14 +1,26 @@
+# Router module
+from django.urls import path
+from mini_social.views import *
+
+
 urlpatterns = [
     path('', homePage),
     # path('signup', signupPage),
     # path('signin', signinPage),
     # Post Routes
-    path('add-post', addPost),
-    path('save-post', savePost),
+    path('post/create', addPost),
+    # path('add-post', addPost),
+    # path('save-post', savePost),
+    path('post/save', savePost),
+    # path('user/profile/<int:id>', userProfile),
+    
+    # hw5 finish all of these views/urls
     path('get-posts', getPosts), # read post
-    path('delete-post', deletePost),
-    path('update-post', updatePost),
-    path('change-post', changePost),
+    # path('delete-post/<str:title>', deletePost),
+    path('delete-post/<int:post_id>', deletePost),
+    # path('update-post', updatePost),
+    path('edit-post/<int:post_id>', changePost),
+    # path('change-post', changePost),
 
 
     #  user routes
@@ -20,6 +32,6 @@ urlpatterns = [
     path("user/profile/<int:id>", userProfile ),
     path("user/profile/edit/<int:id>", editUserProfile ),
     path("user/add/friend/<int:id>", addUserFriend ),
-    path("user/remove/friend/<int:id>", removeUserFriend ),
+    path("user/remove/friend/<int:id>", removeUserFriend ),    
     
 ]
