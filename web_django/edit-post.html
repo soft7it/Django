@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div style="color: red; padding: 10px; border: 3px solid red; margin-bottom: 10px;">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+<h2>Edit post :</h2>
+<form action="/post/edit-post/{{post_id}}" method="POST" enctype="multipart/form-data">
+    <input 
+        name="title" 
+        type="text" 
+        placeholder="title"
+        value="{{title.id}}">
+    <br>   
+    <textarea id="w3review" 
+        name="body" 
+        rows="40" cols="50" 
+        type="text" 
+        placeholder="body"
+        value="{{body.id}}">
+    </textarea>
+    <button>Save</button><br>
+    {% csrf_token %}
+</form>
+{% endblock %}
