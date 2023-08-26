@@ -1,5 +1,5 @@
 
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseServerError
 from django.template import loader
 from django.shortcuts import redirect
 
@@ -59,16 +59,14 @@ def homePage(request):
     }, request) )
 
 def signupPage(request):
-    template = loader.get_template("signup.html")
-          
+    template = loader.get_template("signup.html")          
     
     return HttpResponse( template.render({
         
     }, request) )
 
 def signinPage(request):
-    template = loader.get_template("signin.html")
-         
+    template = loader.get_template("signin.html")         
     
     return HttpResponse( template.render({
         
@@ -115,10 +113,23 @@ def getPosts(request):
     return HttpResponse( template.render({ 
         'posts' : posts       
     }, request) )
+######################################################
+def personalPost(request, post_id):
+    post = Post.objects.get(pk=post_id)  
+    template = loader.get_template("user/post.html")     
+
+    print(type(Post.objects))  # Manager
+    print(type(post))  # QuerySet
+
+    return HttpResponse( template.render({ 
+        'post' : post,   
+    }, request) )
 
 #######################################################
 def updatePost(request):
-    template = loader.get_template("update-post.html")        
+    # template = loader.get_template("update-post.html")  
+    # 
+    template = loader.get_template("/post/edit-post.html")      
     
     id = request.GET['id']
 
@@ -130,21 +141,50 @@ def updatePost(request):
     }, request) )
 
 ######################################################
-def changePost(request):       
+
+def changePost(request, post_id): 
+    post = Post.objects.get(pk=post_id)
+    profileUser = CustomUser.objects.get(pk=post.author_id)
     
-    id = request.GET['id']
-    new_title = request.GET['title']
-    new_body = request.GET['body']
+    visitingUser = get_user(request)
+    if request.method == 'GET':        
+        if profileUser.id == visitingUser.id :
+            template = loader.get_template("post/edit-post.html")
+            return HttpResponse( template.render({ 
+                'profileUser' : profileUser,       
+                'post_id' : post_id,       
+            }, request) )
+        else:
+            return HttpResponseForbidden('Acces Denied, idi guleai...:)')    
+            
+    elif request.method == 'POST':   
+        # Retrieve data from the form (not shown in the provided code)
+        new_title = request.POST.get('title')
+        new_body = request.POST.get('body')
 
-    # 1. find the post by id
-    post = Post.objects.get(pk=id)
-    # print(type(post))
-    post.title = new_title
-    post.body = new_body
+        # Update the post with new data
+        post.title = new_title
+        post.body = new_body
 
-    post.save()
+        post.save()
+        return redirect( f'/user/profile/{visitingUser.id}' )
+    
+##################################################################
+# def changePost(request): 
+    
+    # id = request.GET['id']
+    # new_title = request.GET['title']
+    # new_body = request.GET['body']
 
-    return redirect( '/get-posts' )
+    # # 1. find the post by id
+    # post = Post.objects.get(pk=id)
+    # # print(type(post))
+    # post.title = new_title
+    # post.body = new_body
+
+    # post.save()
+    
+    # return redirect( '/get-posts' )
 
     # return HttpResponse( 'Post update succesfully' )                 
 #######################################################
@@ -166,53 +206,24 @@ def savePost(request): # httpRequest
     post.save()
 
     # hw2 redirect to it's profale
-    return redirect( '/get-posts' )
+    return redirect( f'/user/profile/{visitingUser.id}' )
 
 ########################################################
-def deletePost(request): 
+def deletePost(request, post_id):
+
+    # # # id = request.GET['id']
+    # # # 1. find the post by id
+    # # # post = Post.objects.get(pk=id)
+    # # # 2. delete
+    visitingUser = get_user(request) # User
+    post = Post.objects.filter(id=post_id)
+    if post:
+        post.delete()
     
-    id = request.GET['id']
-
-    # 1. find the post by id
-    post = Post.objects.get(pk=id)
-
-    # 2. delete
-    post.delete()
-
-    return HttpResponse( 'Post deleted successfully' )  #   http://127.0.0.1:8000/delete-post?id=
-
+    # # # return HttpResponse( 'Post deleted successfully' )  #   http://127.0.0.1:8000/delete-post?id=
+    return redirect( f'/user/profile/{visitingUser.id}' )
 
 # User views:#######################################
-# def registerUser(request):
-#     if request.method == 'GET':
-#         template = loader.get_template("user/register.html")        
-#         return HttpResponse( template.render({ }, request)) 
-    
-#     elif request.method == 'POST':
-#         username = request.POST['username']
-        
-#         email = request.POST['email']   # regex
-#         pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
-#         if re.match(pattern, email):        
-        
-#             password = request.POST['password']
-#             confirm_password = request.POST['password']
-
-#             if password == confirm_password:
-#                 User.objects.create_user(username, email, password)
-#                 messages.success(request, 'Create account succesful.')
-#                 ##  redirect to main mage after create account
-                
-#                 user = authenticate(username=username, password=password)
-#                 login(request, user)# end
-#                 return redirect('/')
-#         else:
-#             messages.error(request, 'Wrong credential.')
-#             return redirect('/user/register')
-#     else:
-#         messages.error(request, 'Wrong credential.')
-#         return redirect('/user/register')        
-#     # *********************************
 
 def registerUser(request):
     if request.method == 'GET':
@@ -255,30 +266,7 @@ def registerUser(request):
         return redirect('/user/register')
 
     # User login views:#######################################
-# def loginUser(request):
-#     # req ----> FORM
-#     if request.method == 'GET':
-#         template = loader.get_template("user/login.html")
-#         # message = request.session.get('error_message', None)         
-#         # return HttpResponse( template.render({ 'message': message }, request))
-#         return HttpResponse( template.render({}, request))
-     
-#     elif request.method == 'POST':
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(username=username, password=password)
-#         print(user)
-#         print(type(user))
-#         # req -------> AUTH
-#         if user is None:
-#             # request.session['error_message'] = 'Wrong credential.'
-#             messages.error(request, 'Wrong credential.')
-#             return redirect('/user/login')
-        
-#         login(request, user)
-#         # request.session.pop('error_message')
-#         messages.success(request, 'Login succesful.')
-#         return redirect('/')
+
 def loginUser(request):
     if request.method == 'GET':
         template = loader.get_template("user/login.html")
@@ -349,27 +337,7 @@ def logoutUser(request):
     logout(request)
     return redirect("/")  
     
-# #     User login views:#######################################
-# def logoutUser(request):
-#     show_notifications = request.session.get('show_notifications', None)
-#     logout(request)  # 
-#     request.session.flush() # foteaza stergerea datelor
-#     request.session['show_notifications'] = show_notifications
-#     messages.success(request, 'Logout successful.')
-#     return redirect("/")  
-#  
-# def logoutUser(request):
-#     show_notifications = request.session.get('show_notifications', None)
-#     request.session.flush()
-#     request.session['show_notifications'] = show_notifications
-#     logout(request)
-#     return redirect("/")
-
-# def logoutUser(request):
-#     messages.success(request, 'Logout successful.')
-#     logout(request)
-#     return redirect("/") 
-
+# #     User Profile views:#######################################
 
 def userProfile(request, id):
     # hw3 update user profile - so it shows all of it,s posts
@@ -387,13 +355,9 @@ def userProfile(request, id):
         profileUserIsNotVisitingUserFriend = visitingUser.friends.all().contains(profileUser)
         # print(profileUserIsNotVisitingUserFriend)
         # print(type(userFriends))
-        # titles = Post.objects.all()
-        # titles = Post.objects.filter()
-        # Retrieve titles of posts by the profile user
-        # Assuming you want to filter posts by author_id
-        # titles = Post.objects.filter(author_id=author_id).values_list('title', flat=True)
-        titles = Post.objects.filter(author=id)
-        
+       
+        titles = Post.objects.filter(author_id=id)
+        print(titles)
         return HttpResponse(template.render({
             'profileUser' : profileUser,                
             'visitingUser' : visitingUser,
@@ -401,6 +365,7 @@ def userProfile(request, id):
             'profileUserIsNotVisitingUserFriend' : profileUserIsNotVisitingUserFriend,
             'show_notifications' : show_notifications,
             'titles' : titles,
+            
             }, request))
 
 def addUserFriend(request, id):
@@ -419,7 +384,6 @@ def removeUserFriend(request, id):
     visitingUser = CustomUser.objects.get(pk=visitingUser.id)
     
     visitingUser.friends.remove(profileUser.id)
-    # visitingUser.friends.remove(profileUser.id)
     visitingUser.save()
         
     return redirect(f'/user/profile/{visitingUser.id}')
